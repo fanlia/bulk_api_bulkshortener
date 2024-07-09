@@ -29,13 +29,14 @@ function bulk_api_bulkshortener($action) {
         die();
     }
 
-    $urlArray = array();
+    $urlArray = array(); 
     foreach ($urls as $key => $value) {
       $url = $value['url'];
       $keyword = $value['keyword'];
       $title = $value['title'] ? $value['title'] : $url;
 
-      $urlArray[$key] = yourls_add_new_link($url, $keyword, $title);
+      $return = yourls_add_new_link($url, $keyword, $title);
+      $urlArray[$key] = array_filter($return, function( $key ) { return $key != 'html'; }, ARRAY_FILTER_USE_KEY);
     }
     header('Content-Type:text/json;charset=utf-8');
     echo json_encode($urlArray);
