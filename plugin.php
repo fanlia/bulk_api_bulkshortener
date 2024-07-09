@@ -15,7 +15,11 @@ function bulk_api_bulkshortener($action) {
         return;
     }
 
-    if (!isset($_REQUEST['urls'])) {
+    $urls = $_REQUEST['urls'];
+    /*echo json_encode($urls);*/
+    /*die();*/
+
+    if (!is_array($urls)) {
         $return = array(
             'errorCode' => 400,
             'message' => 'bulkshortener: missing URLS parameter',
@@ -25,14 +29,16 @@ function bulk_api_bulkshortener($action) {
         die();
     }
 
-    $keyword = (isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '');
-    $title = (isset($_REQUEST['title']) ? $_REQUEST['title'] : '');
-    $urls = (isset($_REQUEST['urls']) ? $_REQUEST['urls'] : array());
-    
-    foreach ($urls as $url) {
-        $return = yourls_add_new_link($url, $keyword, $title);
-        echo $return['shorturl'] . "\n";
+    $urlArray = array();
+    foreach ($urls as $key => $value) {
+      $url = $value['url'];
+      $keyword = $value['keyword'];
+      $title = $value['title'] ? $value['title'] : $url;
+
+      $urlArray[$key] = yourls_add_new_link($url, $keyword, $title);
     }
-    
+    header('Content-Type:text/json;charset=utf-8');
+    echo json_encode($urlArray);
+
     die();
 }

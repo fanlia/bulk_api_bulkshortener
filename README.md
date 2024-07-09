@@ -21,8 +21,10 @@ Plugin for [YOURLS](http://yourls.org)
 3. The response contains each shortened URL in a single line.
 
 ## Example
-Request: 
-* http://host:port/yourls-api.php?username=u&password=p&action=bulkshortener&urls[]=http://url1&urls[]=http://url2
+
+```sh
+curl 'http://localhost:8082/yourls-api.php' -d 'username=example_username&password=example_password&action=bulkshortener&urls[0][url]=http://url.com&urls[0][title]=title'
+```
 
 Response:
 * http://s.com/zy1071
